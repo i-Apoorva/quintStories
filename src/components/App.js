@@ -25,8 +25,10 @@ class App extends Component {
 
     removeLinks = (feedData)=>{ 
        feedData.forEach(el =>{
-        el["content:encoded"]= el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "");
-        el["content:encoded"]= el["content:encoded"].replaceAll("Also Read:", "");
+        el["content:encoded"]= el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "")
+                                    .replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, "");
+        // el["content:encoded"]= el["content:encoded"].replaceAll("Also Read:", "");
+        // el["content:encoded"]= el["content:encoded"].replaceAll(/<iframe.+?<\/iframe>/g, "");
         el.pubDate = el.pubDate.replace("+0530", "IST");
       })
       this.setState({feedData})
@@ -37,10 +39,12 @@ class App extends Component {
         let x= stories.filter(story => story.id === el.guid)
           if(x.length){
               el.imageUrl = "https://images.thequint.com/" + x[0]["hero-image-s3-key"]
+              el.author= x[0]["author-name"];
           }
+          
       })
       this.setState({feedData});
-      console.log({feedData});
+      //console.log({feedData});
     }
 
 
@@ -52,7 +56,7 @@ class App extends Component {
                         this.state.feedData.map((item, i) => (
                             <div key={i}>
                                 <h3 className="st-title">{item.title}</h3>
-                                <h5>Updated: {item.pubDate}</h5>
+                                <h5>Updated: {item.pubDate} &nbsp; &nbsp; Author: {item.author}</h5>
                                 <div>
                                     {item.imageUrl ?
                                         <img src={item.imageUrl} data-src={item.imageUrl} alt="story image" data-was-processed="true" /> : null

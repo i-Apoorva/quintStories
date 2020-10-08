@@ -46679,8 +46679,9 @@ var App = /*#__PURE__*/function (_Component) {
 
     _defineProperty(_assertThisInitialized(_this), "removeLinks", function (feedData) {
       feedData.forEach(function (el) {
-        el["content:encoded"] = el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "");
-        el["content:encoded"] = el["content:encoded"].replaceAll("Also Read:", "");
+        el["content:encoded"] = el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "").replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, ""); // el["content:encoded"]= el["content:encoded"].replaceAll("Also Read:", "");
+        // el["content:encoded"]= el["content:encoded"].replaceAll(/<iframe.+?<\/iframe>/g, "");
+
         el.pubDate = el.pubDate.replace("+0530", "IST");
       });
 
@@ -46697,16 +46698,14 @@ var App = /*#__PURE__*/function (_Component) {
 
         if (x.length) {
           el.imageUrl = "https://images.thequint.com/" + x[0]["hero-image-s3-key"];
+          el.author = x[0]["author-name"];
         }
       });
 
       _this.setState({
         feedData: feedData
-      });
+      }); //console.log({feedData});
 
-      console.log({
-        feedData: feedData
-      });
     });
 
     _this.state = {
@@ -46762,7 +46761,7 @@ var App = /*#__PURE__*/function (_Component) {
             key: i
           }, /*#__PURE__*/_react.default.createElement("h3", {
             className: "st-title"
-          }, item.title), /*#__PURE__*/_react.default.createElement("h5", null, "Updated: ", item.pubDate), /*#__PURE__*/_react.default.createElement("div", null, item.imageUrl ? /*#__PURE__*/_react.default.createElement("img", {
+          }, item.title), /*#__PURE__*/_react.default.createElement("h5", null, "Updated: ", item.pubDate, " \xA0 \xA0 Author: ", item.author), /*#__PURE__*/_react.default.createElement("div", null, item.imageUrl ? /*#__PURE__*/_react.default.createElement("img", {
             src: item.imageUrl,
             "data-src": item.imageUrl,
             alt: "story image",
