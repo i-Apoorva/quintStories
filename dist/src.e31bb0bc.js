@@ -46679,9 +46679,7 @@ var App = /*#__PURE__*/function (_Component) {
 
     _defineProperty(_assertThisInitialized(_this), "removeLinks", function (feedData) {
       feedData.forEach(function (el) {
-        el["content:encoded"] = el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "").replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, ""); // el["content:encoded"]= el["content:encoded"].replaceAll("Also Read:", "");
-        // el["content:encoded"]= el["content:encoded"].replaceAll(/<iframe.+?<\/iframe>/g, "");
-
+        el["content:encoded"] = el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "").replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, "").replaceAll(/<img[^>]*>/g, "");
         el.pubDate = el.pubDate.replace("+0530", "IST");
       });
 
@@ -46704,13 +46702,12 @@ var App = /*#__PURE__*/function (_Component) {
 
       _this.setState({
         feedData: feedData
-      }); //console.log({feedData});
-
+      });
     });
 
     _this.state = {
       feedData: [],
-      stories: []
+      page: 1
     };
     return _this;
   }
@@ -46724,26 +46721,34 @@ var App = /*#__PURE__*/function (_Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _context.prev = 0;
+                _context.next = 3;
                 return parser.parseURL(CORS_PROXY + RSS_URL);
 
-              case 2:
+              case 3:
                 feed = _context.sent;
-                _context.next = 5;
+                _context.next = 6;
                 return _axios.default.get(CORS_PROXY + STORIES_API);
 
-              case 5:
+              case 6:
                 response = _context.sent;
                 stories = response.data;
                 this.removeLinks(feed.items);
                 this.addImages(feed.items, stories.stories);
+                _context.next = 15;
+                break;
 
-              case 9:
+              case 12:
+                _context.prev = 12;
+                _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
+
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee, this, [[0, 12]]);
       }));
 
       function componentDidMount() {
@@ -46913,7 +46918,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59662" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63206" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

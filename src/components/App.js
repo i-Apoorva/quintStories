@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 let Parser = require('rss-parser');
 import logo from '../assets/images/quint-logo.jpg';
 import axios from 'axios';
@@ -6,45 +6,49 @@ let parser = new Parser();
 
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const RSS_URL = "https://www.thequint.com/stories.rss"
-const STORIES_API ="https://www.thequint.com/api/v1/stories"
+const STORIES_API = "https://www.thequint.com/api/v1/stories"
 
 class App extends Component {
     constructor() {
         super();
-        this.state = { feedData: [], stories: [] };
-   }
-    
+        this.state = {
+            feedData: [],
+            page: 1
+        };
+    }
+
     async componentDidMount() {
-        const feed = await parser.parseURL(CORS_PROXY+ RSS_URL);
-        const response = await axios.get(CORS_PROXY+STORIES_API);
-        const stories = response.data;
-        this.removeLinks(feed.items)
-        this.addImages(feed.items, stories.stories)
+        try {
+            const feed = await parser.parseURL(CORS_PROXY + RSS_URL);
+            const response = await axios.get(CORS_PROXY + STORIES_API);
+            const stories = response.data;
+            this.removeLinks(feed.items)
+            this.addImages(feed.items, stories.stories)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
-    removeLinks = (feedData)=>{ 
-       feedData.forEach(el =>{
-        el["content:encoded"]= el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "")
-                                    .replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, "");
-        // el["content:encoded"]= el["content:encoded"].replaceAll("Also Read:", "");
-        // el["content:encoded"]= el["content:encoded"].replaceAll(/<iframe.+?<\/iframe>/g, "");
-        el.pubDate = el.pubDate.replace("+0530", "IST");
-      })
-      this.setState({feedData})
+    removeLinks = (feedData) => {
+        feedData.forEach(el => {
+            el["content:encoded"] = el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "")
+                .replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, "").replaceAll(/<img[^>]*>/g, "");
+            el.pubDate = el.pubDate.replace("+0530", "IST");
+        })
+        this.setState({ feedData })
     }
 
-    addImages = (feedData, stories)=> {
-      feedData.forEach((el, i) => {
-        let x= stories.filter(story => story.id === el.guid)
-          if(x.length){
-              el.imageUrl = "https://images.thequint.com/" + x[0]["hero-image-s3-key"]
-              el.author= x[0]["author-name"];
-          }
-          
-      })
-      this.setState({feedData});
-      //console.log({feedData});
+    addImages = (feedData, stories) => {
+        feedData.forEach((el, i) => {
+            let x = stories.filter(story => story.id === el.guid)
+            if (x.length) {
+                el.imageUrl = "https://images.thequint.com/" + x[0]["hero-image-s3-key"]
+                el.author = x[0]["author-name"];
+            }
+
+        })
+        this.setState({ feedData });
     }
 
 
