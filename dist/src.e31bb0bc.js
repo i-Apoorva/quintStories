@@ -46710,7 +46710,6 @@ var App = /*#__PURE__*/function (_Component) {
     });
 
     _this.state = {
-      feed: [],
       feedData: [],
       stories: []
     };
@@ -46739,11 +46738,8 @@ var App = /*#__PURE__*/function (_Component) {
                 stories = response.data;
                 this.removeLinks(feed.items);
                 this.addImages(feed.items, stories.stories);
-                this.setState({
-                  feed: feed
-                });
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -46760,34 +46756,40 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement("div", null, this.state.feedData.map(function (item, i) {
-        return /*#__PURE__*/_react.default.createElement("div", {
-          key: i
-        }, /*#__PURE__*/_react.default.createElement("h3", {
-          className: "st-title"
-        }, i + 1, ".", item.title), /*#__PURE__*/_react.default.createElement("h5", null, "Updated: ", item.pubDate), /*#__PURE__*/_react.default.createElement("div", null, item.imageUrl ? /*#__PURE__*/_react.default.createElement("img", {
-          src: item.imageUrl,
-          "data-src": item.imageUrl,
-          alt: "story image",
-          "data-was-processed": "true"
-        }) : null), /*#__PURE__*/_react.default.createElement("div", {
-          dangerouslySetInnerHTML: {
-            __html: item["content:encoded"]
-          }
-        }), /*#__PURE__*/_react.default.createElement("div", {
-          className: "logo-style"
-        }, /*#__PURE__*/_react.default.createElement("div", null, "Go to Article:  "), /*#__PURE__*/_react.default.createElement("a", {
-          href: item.link,
-          className: "logo-url",
-          "aria-label": "Link to Quint story home page"
-        }, /*#__PURE__*/_react.default.createElement("img", {
-          src: _quintLogo.default,
-          "data-src": _quintLogo.default,
-          alt: "Quint Logo",
-          className: "logo",
-          "data-was-processed": "true"
-        }))));
-      }));
+      if (this.state.feedData.length) {
+        return /*#__PURE__*/_react.default.createElement("div", null, this.state.feedData.map(function (item, i) {
+          return /*#__PURE__*/_react.default.createElement("div", {
+            key: i
+          }, /*#__PURE__*/_react.default.createElement("h3", {
+            className: "st-title"
+          }, item.title), /*#__PURE__*/_react.default.createElement("h5", null, "Updated: ", item.pubDate), /*#__PURE__*/_react.default.createElement("div", null, item.imageUrl ? /*#__PURE__*/_react.default.createElement("img", {
+            src: item.imageUrl,
+            "data-src": item.imageUrl,
+            alt: "story image",
+            "data-was-processed": "true"
+          }) : null), /*#__PURE__*/_react.default.createElement("div", {
+            dangerouslySetInnerHTML: {
+              __html: item["content:encoded"]
+            }
+          }), /*#__PURE__*/_react.default.createElement("div", {
+            className: "logo-style"
+          }, /*#__PURE__*/_react.default.createElement("div", null, "Go to Article:  "), /*#__PURE__*/_react.default.createElement("a", {
+            href: item.link,
+            className: "logo-url",
+            "aria-label": "Link to Quint story home page"
+          }, /*#__PURE__*/_react.default.createElement("img", {
+            src: _quintLogo.default,
+            "data-src": _quintLogo.default,
+            alt: "Quint Logo",
+            className: "logo",
+            "data-was-processed": "true"
+          }))));
+        }));
+      }
+
+      return /*#__PURE__*/_react.default.createElement("img", {
+        src: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+      });
     }
   }]);
 
