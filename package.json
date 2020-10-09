@@ -19,6 +19,7 @@
     "parcel-bundler": "^1.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-lazyload": "^3.0.0",
     "react-router-dom": "^5.2.0",
     "rss-parser": "^3.9.0",
     "serve": "^11.3.2"

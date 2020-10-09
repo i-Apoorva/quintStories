@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 let Parser = require('rss-parser');
 import logo from '../assets/images/quint-logo.jpg';
+import LazyLoad from 'react-lazyload';
 import axios from 'axios';
 let parser = new Parser();
 
@@ -13,7 +14,8 @@ class App extends Component {
         super();
         this.state = {
             feedData: [],
-            page: 1
+            stories: [],
+            noData: true
         };
     }
 
@@ -22,8 +24,16 @@ class App extends Component {
             const feed = await parser.parseURL(CORS_PROXY + RSS_URL);
             const response = await axios.get(CORS_PROXY + STORIES_API);
             const stories = response.data;
+            if (!feed.items) {
+                this.setState({noData: true}) 
+              } else {
+                this.setState({
+                  noData: false
+                })
+            }
             this.removeLinks(feed.items)
             this.addImages(feed.items, stories.stories)
+            this.setState({stories: stories.stories})
         } catch (error) {
             console.log(error);
         }
@@ -33,7 +43,8 @@ class App extends Component {
     removeLinks = (feedData) => {
         feedData.forEach(el => {
             el["content:encoded"] = el["content:encoded"].replaceAll(/<a\b[^>]*>(.*?)<\/a>/ig, "")
-                .replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, "").replaceAll(/<img[^>]*>/g, "");
+                .replaceAll("Also Read:", "").replaceAll(/<iframe.+?<\/iframe>/g, "");
+                // .replaceAll(/<img[^>]*>/g, "")
             el.pubDate = el.pubDate.replace("+0530", "IST");
         })
         this.setState({ feedData })
@@ -53,11 +64,16 @@ class App extends Component {
 
 
     render() {
+        if(this.state.noData) {
+            return <p>No stories were returned!</p>;
+          }
+
         if (this.state.feedData.length) {
             return (
                 <div>
                     {
                         this.state.feedData.map((item, i) => (
+                            <LazyLoad key={i}>
                             <div key={i}>
                                 <h3 className="st-title">{item.title}</h3>
                                 <h5>Updated: {item.pubDate} &nbsp; &nbsp; Author: {item.author}</h5>
@@ -76,8 +92,9 @@ class App extends Component {
                                     </a>
 
                                 </div>
-
+                                
                             </div>
+                            </LazyLoad>
                         ))
                     }
 
