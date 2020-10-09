@@ -15,6 +15,7 @@ class App extends Component {
         this.state = {
             feedData: [],
             stories: [],
+            feed: [],
             noData: true
         };
     }
@@ -25,7 +26,7 @@ class App extends Component {
             const response = await axios.get(CORS_PROXY + STORIES_API);
             const stories = response.data;
             if (!feed.items) {
-                this.setState({noData: true}) 
+                this.setState({feed: feed, noData: true}) 
               } else {
                 this.setState({
                   noData: false
@@ -64,25 +65,33 @@ class App extends Component {
 
 
     render() {
-        if(this.state.noData) {
-            return <p>No stories were returned!</p>;
+
+        
+        if(!this.state.feedData.length) {
+            return (
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
+            )
           }
 
-        if (this.state.feedData.length) {
             return (
                 <div>
                     {
                         this.state.feedData.map((item, i) => (
-                            <LazyLoad key={i}>
+                            <LazyLoad key={i} placeholder="loading..." height={200} offset={100}>
                             <div key={i}>
                                 <h3 className="st-title">{item.title}</h3>
                                 <h5>Updated: {item.pubDate} &nbsp; &nbsp; Author: {item.author}</h5>
+                                
                                 <div>
                                     {item.imageUrl ?
-                                        <img src={item.imageUrl} data-src={item.imageUrl} alt="story image" data-was-processed="true" /> : null
-
+                                    <LazyLoad height={200} once >
+                                        <img src={item.imageUrl} data-src={item.imageUrl} alt="story image" data-was-processed="true" /> 
+                                        </LazyLoad>
+                                        : null
+                                        
                                     }
                                 </div>
+
 
                                 <div dangerouslySetInnerHTML={{ __html: item["content:encoded"] }} />
                                 <div className="logo-style">
@@ -96,15 +105,13 @@ class App extends Component {
                             </div>
                             </LazyLoad>
                         ))
-                    }
+                                }
 
                 </div>
             )
-        }
+        
 
-        return (
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />
-        )
+        
     }
 }
 export default App;
