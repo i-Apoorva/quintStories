@@ -6,7 +6,7 @@ Deployment- https://apoo-quint-stories.herokuapp.com/
 
 # setup
 
-git clone
+git clone : https://github.com/i-Apoorva/quintStories.git
 
 npm install
 
