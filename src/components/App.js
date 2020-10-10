@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 let Parser = require('rss-parser');
 import logo from '../assets/images/quint-logo.jpg';
-import LazyLoad from 'react-lazyload';
+import LazyLoad, {lazyload} from 'react-lazyload';
 import axios from 'axios';
 let parser = new Parser();
 
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const RSS_URL = "https://www.thequint.com/stories.rss"
 const STORIES_API = "https://www.thequint.com/api/v1/stories"
+
 
 class App extends Component {
     constructor() {
@@ -34,7 +35,7 @@ class App extends Component {
             }
             this.removeLinks(feed.items)
             this.addImages(feed.items, stories.stories)
-            this.setState({stories: stories.stories})
+            this.setState({stories: stories.stories, feed})
         } catch (error) {
             console.log(error);
         }
@@ -65,7 +66,7 @@ class App extends Component {
 
 
     render() {
-
+      let loader= <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" />;
         
         if(!this.state.feedData.length) {
             return (
@@ -77,7 +78,7 @@ class App extends Component {
                 <div>
                     {
                         this.state.feedData.map((item, i) => (
-                            <LazyLoad key={i} placeholder="loading..." height={200} offset={100}>
+                            <LazyLoad key={i} placeholder={loader} height={200} offset={-100}>
                             <div key={i}>
                                 <h3 className="st-title">{item.title}</h3>
                                 <h5>Updated: {item.pubDate} &nbsp; &nbsp; Author: {item.author}</h5>
@@ -91,8 +92,6 @@ class App extends Component {
                                         
                                     }
                                 </div>
-
-
                                 <div dangerouslySetInnerHTML={{ __html: item["content:encoded"] }} />
                                 <div className="logo-style">
                                     <div>Go to Article:  </div>
@@ -103,7 +102,7 @@ class App extends Component {
                                 </div>
                                 
                             </div>
-                            </LazyLoad>
+            </LazyLoad>
                         ))
                                 }
 

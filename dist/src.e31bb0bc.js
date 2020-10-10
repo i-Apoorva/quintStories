@@ -48073,7 +48073,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _quintLogo = _interopRequireDefault(require("../assets/images/quint-logo.jpg"));
 
-var _reactLazyload = _interopRequireDefault(require("react-lazyload"));
+var _reactLazyload = _interopRequireWildcard(require("react-lazyload"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -48204,7 +48204,8 @@ var App = /*#__PURE__*/function (_Component) {
                 this.removeLinks(feed.items);
                 this.addImages(feed.items, stories.stories);
                 this.setState({
-                  stories: stories.stories
+                  stories: stories.stories,
+                  feed: feed
                 });
                 _context.next = 17;
                 break;
@@ -48231,6 +48232,10 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var loader = /*#__PURE__*/_react.default.createElement("img", {
+        src: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+      });
+
       if (!this.state.feedData.length) {
         return /*#__PURE__*/_react.default.createElement("img", {
           src: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
@@ -48240,9 +48245,9 @@ var App = /*#__PURE__*/function (_Component) {
       return /*#__PURE__*/_react.default.createElement("div", null, this.state.feedData.map(function (item, i) {
         return /*#__PURE__*/_react.default.createElement(_reactLazyload.default, {
           key: i,
-          placeholder: "loading...",
+          placeholder: loader,
           height: 200,
-          offset: 100
+          offset: -100
         }, /*#__PURE__*/_react.default.createElement("div", {
           key: i
         }, /*#__PURE__*/_react.default.createElement("h3", {
