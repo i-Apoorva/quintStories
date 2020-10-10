@@ -24,8 +24,6 @@ class App extends Component {
     async componentDidMount() {
         try {
             const feed = await parser.parseURL(CORS_PROXY + RSS_URL);
-            const response = await axios.get(CORS_PROXY + STORIES_API);
-            const stories = response.data;
             if (!feed.items) {
                 this.setState({feed: feed, noData: true}) 
               } else {
@@ -34,8 +32,7 @@ class App extends Component {
                 })
             }
             this.removeLinks(feed.items)
-            this.addImages(feed.items, stories.stories)
-            this.setState({stories: stories.stories, feed})
+            this.addImages(feed.items)
         } catch (error) {
             console.log(error);
         }
@@ -52,7 +49,9 @@ class App extends Component {
         this.setState({ feedData })
     }
 
-    addImages = (feedData, stories) => {
+    addImages = async (feedData) => {
+        const response = await axios.get(CORS_PROXY + STORIES_API);
+        const stories = response.data.stories;
         feedData.forEach((el, i) => {
             let x = stories.filter(story => story.id === el.guid)
             if (x.length) {

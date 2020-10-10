@@ -48142,22 +48142,46 @@ var App = /*#__PURE__*/function (_Component) {
       });
     });
 
-    _defineProperty(_assertThisInitialized(_this), "addImages", function (feedData, stories) {
-      feedData.forEach(function (el, i) {
-        var x = stories.filter(function (story) {
-          return story.id === el.guid;
-        });
+    _defineProperty(_assertThisInitialized(_this), "addImages", /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(feedData) {
+        var response, stories;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _axios.default.get(CORS_PROXY + STORIES_API);
 
-        if (x.length) {
-          el.imageUrl = "https://images.thequint.com/" + x[0]["hero-image-s3-key"];
-          el.author = x[0]["author-name"];
-        }
-      });
+              case 2:
+                response = _context.sent;
+                stories = response.data.stories;
+                feedData.forEach(function (el, i) {
+                  var x = stories.filter(function (story) {
+                    return story.id === el.guid;
+                  });
 
-      _this.setState({
-        feedData: feedData
-      });
-    });
+                  if (x.length) {
+                    el.imageUrl = "https://images.thequint.com/" + x[0]["hero-image-s3-key"];
+                    el.author = x[0]["author-name"];
+                  }
+                });
+
+                _this.setState({
+                  feedData: feedData
+                });
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }());
 
     _this.state = {
       feedData: [],
@@ -48171,24 +48195,18 @@ var App = /*#__PURE__*/function (_Component) {
   _createClass(App, [{
     key: "componentDidMount",
     value: function () {
-      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var feed, response, stories;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+      var _componentDidMount = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+        var feed;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
+                _context2.prev = 0;
+                _context2.next = 3;
                 return parser.parseURL(CORS_PROXY + RSS_URL);
 
               case 3:
-                feed = _context.sent;
-                _context.next = 6;
-                return _axios.default.get(CORS_PROXY + STORIES_API);
-
-              case 6:
-                response = _context.sent;
-                stories = response.data;
+                feed = _context2.sent;
 
                 if (!feed.items) {
                   this.setState({
@@ -48202,25 +48220,21 @@ var App = /*#__PURE__*/function (_Component) {
                 }
 
                 this.removeLinks(feed.items);
-                this.addImages(feed.items, stories.stories);
-                this.setState({
-                  stories: stories.stories,
-                  feed: feed
-                });
-                _context.next = 17;
+                this.addImages(feed.items);
+                _context2.next = 12;
                 break;
 
-              case 14:
-                _context.prev = 14;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
 
-              case 17:
+              case 12:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this, [[0, 14]]);
+        }, _callee2, this, [[0, 9]]);
       }));
 
       function componentDidMount() {
